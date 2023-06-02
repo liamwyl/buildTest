@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECharts测试</title>
+  <script src="./lib/echarts.min.js"></script>
+</head>
+
+<body>
+  <div class="container" style="width: 100%; height: 94vh;background-color: #02004A;">
+  </div>
+  <div class="textContain">
+    <h1>年龄结构</h1>
+    <div id="myButton">
+      <div id="total">
+        <h4 id="totalTxt">汇总</h4>
+      </div>
+      <!-- <div id="triangle"></div> -->
+      <div id="detail">
+        <h4 id="detailTxt">明细</h4>
+      </div>
+    </div>
+  </div>
+  <script>
+    // const titleFontSize = document.querySelector('.container').offsetWidth / 100 * 3.6
+    // console.log(titleFontSize)
+    let totalEcharts = echarts.init(document.querySelector('.container'))
+    let detailEcharts = echarts.init(document.querySelector('.container'))
+
+
+    // 汇总配置
+    let totalOption = {
+      splitLine: {                                //网格线
+        show: false
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        orient: 'horizontal',
+        x: 'center', 
+        y: 'bottom',  
+        padding: 30,
+        itemGap: 20,
+        textStyle: {
+          color: '#FFFFFF',
+          fontSize: 10
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '10%',
+        containLabel: true,
+      },
+      xAxis: {
+        show: false,
+        type: 'value',
+        axisTick: { show: false },
+        splitLine: {
+          show: false//轴线
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#fff'
+          }
+        },
+      },
+      yAxis: {
+        type: 'category',
+        data: ['2020年', '2021年', '2022年'],
+
+        // show:false,
+        axisTick: { show: false },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#fff',
+          }
+        },
+        axisLabel: {
+          fontSize: 16
+        }
+      },
+      series: [
+        {
+          showBackground: true,
+          name: '35周岁以下',
+          type: 'bar',
+          stack: 'total',
+          label: {
+            show: true,
+            fontSize: 16,
+
+          },
+          emphasis: {
+            focus: 'series'
+          },
+          data: [390, 330, 320],
+          itemStyle: {
+            color: '#81E7E0'
+          },
+          barWidth: '40%',
+        },
+        {
+          name: '35-44周岁',
+          type: 'bar',
+          stack: 'total',
+          label: {
+            show: true,
+            fontSize: 16,
+          },
+          emphasis: {
+            focus: 'series'
+          },
+          data: [101, 134, 90],
+          itemStyle: {
+            color: '#D3E77F'
+          }
+        },
+        {
+          name: '45-54周岁',
+          type: 'bar',
+          stack: 'total',
+          label: {
+            show: true,
+            fontSize: 16,
+          },
+          emphasis: {
+            focus: 'series'
+          },
+          data: [290, 330, 310],
+          itemStyle: {
+            color: '#90DE96'
+          }
+        },
+        {
+          showBackground: true,
+          name: '55岁及以上',
+          type: 'bar',
+          stack: 'total',
+          label: {
+            show: true,
+            fontSize: 16,
+          },
+          emphasis: {
+            focus: 'series'
+          },
+          data: [190, 240, 270],
+          itemStyle: {
+            color: '#6198EB'
+          }
+        }
+      ]
+    };
+
+
+    // 明细配置
+    let detailOption = {
+      xAxis: {
+        show: true,
+        axisTick: { show: false },
+        type: 'category',
+        data: ['2020年', '2021年', '2022年'],
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#fff',
+          }
+        },
+      },
+      yAxis: {
+        type: 'value',
+        axisTick: { show: false },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#fff',
+          }
+        },
+      },
+      series: [
+        {
+          data: [120, 200, 150],
+          barWidth: '30%',
+          itemStyle: {
+            color: '#81E7E0'
+          },
+          type: 'bar'
+        }
+      ]
+    }
+
+
+    // totalEcharts.setOption(totalOption)
+    // 绑定按钮事件
+    let button1 = document.getElementById("total");
+
+    button1.addEventListener('click', function () {
+      // alert(123)
+      document.getElementById('detail').style.backgroundColor = '#1A1780'
+      // document.getElementById('triangle').style.backgroundColor='#75FBF3'
+      // document.getElementById('myButton').style.backgroundColor='#75FBF3'
+      document.getElementById('total').style.backgroundColor = '#75FBF3'
+      detailEcharts.clear()
+      totalEcharts.setOption(totalOption);
+      // console.log(213)
+
+    }
+    );
+    let button2 = document.getElementById("detail");
+    button2.addEventListener('click', function () {
+      // alert(456)
+      document.getElementById('detail').style.backgroundColor = '#75FBF3'
+      // document.getElementById('triangle').style.backgroundColor='#75FBF3'
+      // document.getElementById('myButton').style.backgroundColor='#75FBF3'
+      document.getElementById('total').style.backgroundColor = '#1A1780'
+      totalEcharts.clear()
+      detailEcharts.setOption(detailOption);
+    });
+
+
+    totalEcharts.setOption(totalOption);
+    // 获取文字的实际大小
+
+    function getFontSize(baseFontSize) {
+      let devicePixelRatio = window.devicePixelRatio || 1; // 获取设备像素比
+      let screenWidth = window.innerWidth >= 750 ? 750 : window.innerWidth; // 获取屏幕宽度并做一定处理
+      return Math.round(baseFontSize * screenWidth / (375 * devicePixelRatio)); // 计算实际字号
+
+    }
+
+    // 自适应
+    window.addEventListener('resize', function () {
+      totalEcharts.resize();
+    });
+  </script>
+  <style lang="less">
+    #myButton {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 30px;
+      right: 20px;
+      width: 150px;
+      height: 30px;
+      /* padding: 10px; */
+      background-color: #1A1780;
+      /* border: 1px solid #ccc; */
+      /* border-radius: 5px; */
+      /* z-index: 9999; */
+
+      #total {
+        /* margin-top: 30px; */
+        position: relative;
+        height: 100%;
+        width: 50%;
+        background-color: #75FBF3;
+        color: #3C83B5;
+        cursor: pointer;
+
+        /* margin-right: 5px; */
+        #totalTxt {
+          position: relative;
+          top: -16px;
+          left: 20px;
+        }
+      }
+
+      #detail {
+        position: relative;
+        height: 100%;
+        width: 50%;
+        z-index: 1;
+        background-color: #1A1780;
+        color: #3C83B5;
+        cursor: pointer;
+
+        #detailTxt {
+          position: relative;
+          top: -16px;
+          left: 20px;
+        }
+
+      }
+    }
+
+    .textContain h1 {
+      font-size: 24px;
+      position: absolute;
+      top: 0px;
+      left: 20px;
+      padding: 10px;
+      color: #53B6C5;
+    }
+
+    /* #triangle {
+      z-index: 3;
+      position: relative;
+      background-color: #1A1780;
+      left: -3px;
+      width: 0;
+      height: 0;
+      border-top: 15px solid transparent;
+      border-right: 17px solid #75FBF3;
+      border-bottom: 15px solid transparent;
+      transform: rotate(180deg);
+    } */
+  </style>
+</body>
+
+</html>
